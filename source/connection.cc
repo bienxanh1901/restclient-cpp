@@ -71,6 +71,7 @@ RestClient::Connection::GetInfo() {
   ret.keyPassword = this->keyPassword;
 
   ret.uriProxy = this->uriProxy;
+  ret.interface = this->interface;
 
   return ret;
 }
@@ -277,6 +278,17 @@ RestClient::Connection::SetProxy(const std::string& uriProxy) {
 }
 
 /**
+ * @brief set interface
+ *
+ * @param interface
+ *
+ */
+void
+RestClient::Connection::SetInterface(const std::string& interface) {
+  this->interface = interface;
+}
+
+/**
  * @brief helper function to get called from the actual request methods to
  * prepare the curlHandle for transfer with generic options, perform the
  * request and record some stats from the last request and then reset the
@@ -386,6 +398,16 @@ RestClient::Connection::performCurlRequest(const std::string& uri) {
     curl_easy_setopt(this->curlHandle, CURLOPT_HTTPPROXYTUNNEL,
                      1L);
   }
+
+  // set interface
+  if (!this->interface.empty()) {
+    curl_easy_setopt(this->curlHandle, CURLOPT_INTERFACE,
+                     this->interface.c_str());
+  }
+
+  // set CURLOPT_DNS_SERVERS 
+  curl_easy_setopt(this->curlHandle, CURLOPT_DNS_SERVERS, "8.8.8.8,8.8.4.4"); 
+
 
   res = curl_easy_perform(this->curlHandle);
   if (res != CURLE_OK) {
