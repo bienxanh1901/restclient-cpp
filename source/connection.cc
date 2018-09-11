@@ -72,7 +72,7 @@ RestClient::Connection::GetInfo() {
 
   ret.uriProxy = this->uriProxy;
   ret.interface = this->interface;
-  ret.DNSServer = this->DNSServers;
+  ret.DNSServers = this->DNSServers;
 
   return ret;
 }
@@ -297,7 +297,7 @@ RestClient::Connection::SetInterface(const std::string& interface) {
  */
 void
 RestClient::Connection::SetDNSServer(const std::string& DNSServers) {
-  this->DNSServer = DNSServers;
+  this->DNSServers = DNSServers;
 }
 
 /**
