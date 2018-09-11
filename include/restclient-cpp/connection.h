@@ -173,7 +173,7 @@ class Connection {
     void SetInterface(const std::string& interface);
 
     // set CURLOPT_DNS_SERVERS
-    void SetDNSServer(const std::string& DNSServers);
+    void SetDNSServers(const std::string& DNSServers);
 
     std::string GetUserAgent();
 

@@ -261,3 +261,11 @@ TEST_F(ConnectionTest, TestInvalidProxy)
   EXPECT_EQ("Failed to query.", res.body);
   EXPECT_EQ(-1, res.code);
 }
+
+TEST_F(ConnectionTest, TestSetDNSServers)
+{
+  conn->SetDNSServers("8.8.8.8,8.8.4.4");
+  RestClient::Response res = conn->get("/get");
+  EXPECT_EQ(200, res.code);
+}
+
