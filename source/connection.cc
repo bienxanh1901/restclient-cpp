@@ -72,6 +72,7 @@ RestClient::Connection::GetInfo() {
 
   ret.uriProxy = this->uriProxy;
   ret.interface = this->interface;
+  ret.DNSServer = this->DNSServers;
 
   return ret;
 }
@@ -289,6 +290,17 @@ RestClient::Connection::SetInterface(const std::string& interface) {
 }
 
 /**
+ * @brief set DNS servers
+ *
+ * @param DNS servers
+ *
+ */
+void
+RestClient::Connection::SetDNSServer(const std::string& DNSServers) {
+  this->DNSServer = DNSServers;
+}
+
+/**
  * @brief helper function to get called from the actual request methods to
  * prepare the curlHandle for transfer with generic options, perform the
  * request and record some stats from the last request and then reset the
@@ -406,9 +418,11 @@ RestClient::Connection::performCurlRequest(const std::string& uri) {
   }
 
   // set CURLOPT_DNS_SERVERS 
-  curl_easy_setopt(this->curlHandle, CURLOPT_DNS_SERVERS, "8.8.8.8,8.8.4.4"); 
-
-
+  if (!this->interface.empty()) {
+    curl_easy_setopt(this->curlHandle, CURLOPT_DNS_SERVERS, 
+                     this->DNSServers.c_str()); 
+  }
+  
   res = curl_easy_perform(this->curlHandle);
   if (res != CURLE_OK) {
     switch (res) {
