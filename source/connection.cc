@@ -289,6 +289,19 @@ RestClient::Connection::SetInterface(const std::string& interface) {
   this->interface = interface;
 }
 
+
+/**
+ * @brief set DNS interface
+ *
+ * @param interface
+ *
+ */
+void
+RestClient::Connection::SetDNSInterface(const std::string& dnsIface)
+{
+  this->dnsInterface = dnsIface;
+}
+
 /**
  * @brief set DNS servers
  *
@@ -417,7 +430,13 @@ RestClient::Connection::performCurlRequest(const std::string& uri) {
                      this->interface.c_str());
   }
 
-  // set CURLOPT_DNS_SERVERS 
+  // set CURLOPT_DNS_INTERFACE
+  if (!this->dnsInterface.empty()) {
+    curl_easy_setopt(this->curlHandle, CURLOPT_DNS_INTERFACE, 
+                     this->dnsInterface.c_str()); 
+  }
+
+  // set CURLOPT_DNS_SERVERS
   if (!this->dnsServers.empty()) {
     curl_easy_setopt(this->curlHandle, CURLOPT_DNS_SERVERS, 
                      this->dnsServers.c_str()); 
