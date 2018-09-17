@@ -72,7 +72,7 @@ RestClient::Connection::GetInfo() {
 
   ret.uriProxy = this->uriProxy;
   ret.interface = this->interface;
-  ret.DNSServers = this->DNSServers;
+  ret.dnsServers = this->dnsServers;
 
   return ret;
 }
@@ -289,6 +289,19 @@ RestClient::Connection::SetInterface(const std::string& interface) {
   this->interface = interface;
 }
 
+
+/**
+ * @brief set DNS interface
+ *
+ * @param interface
+ *
+ */
+void
+RestClient::Connection::SetDNSInterface(const std::string& dnsIface)
+{
+  this->dnsInterface = dnsIface;
+}
+
 /**
  * @brief set DNS servers
  *
@@ -296,8 +309,8 @@ RestClient::Connection::SetInterface(const std::string& interface) {
  *
  */
 void
-RestClient::Connection::SetDNSServers(const std::string& DNSServers) {
-  this->DNSServers = DNSServers;
+RestClient::Connection::SetDNSServers(const std::string& dnsServers) {
+  this->dnsServers = dnsServers;
 }
 
 /**
@@ -417,10 +430,16 @@ RestClient::Connection::performCurlRequest(const std::string& uri) {
                      this->interface.c_str());
   }
 
-  // set CURLOPT_DNS_SERVERS 
-  if (!this->DNSServers.empty()) {
+  // set CURLOPT_DNS_INTERFACE
+  if (!this->dnsInterface.empty()) {
+    curl_easy_setopt(this->curlHandle, CURLOPT_DNS_INTERFACE, 
+                     this->dnsInterface.c_str()); 
+  }
+
+  // set CURLOPT_DNS_SERVERS
+  if (!this->dnsServers.empty()) {
     curl_easy_setopt(this->curlHandle, CURLOPT_DNS_SERVERS, 
-                     this->DNSServers.c_str()); 
+                     this->dnsServers.c_str()); 
   }
   
   res = curl_easy_perform(this->curlHandle);

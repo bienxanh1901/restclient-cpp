@@ -121,7 +121,8 @@ class Connection {
       std::string customUserAgent;
       std::string uriProxy;
       std::string interface;
-      std::string DNSServers;
+      std::string dnsServers;
+      std::string dnsInterface;
       RequestInfo lastRequest;
     } Info;
 
@@ -172,8 +173,11 @@ class Connection {
     // set CURLOPT_INTERFACE
     void SetInterface(const std::string& interface);
 
+    // set CURLOPT_DNS_INTERFACE
+    void SetDNSInterface(const std::string& dnsIface);
+
     // set CURLOPT_DNS_SERVERS
-    void SetDNSServers(const std::string& DNSServers);
+    void SetDNSServers(const std::string& dnsServers);
 
     std::string GetUserAgent();
 
@@ -220,7 +224,8 @@ class Connection {
     std::string keyPassword;
     std::string uriProxy;
     std::string interface;
-    std::string DNSServers;
+    std::string dnsInterface;
+    std::string dnsServers;
     RestClient::Response performCurlRequest(const std::string& uri);
 };
 };  // namespace RestClient
